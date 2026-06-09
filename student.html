@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .form-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Image Upload */
+        .image-upload-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .image-upload-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .image-upload-wrapper {
+            position: relative;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-wrapper:hover {
+            background: #eef2ff;
+            border-color: #764ba2;
+        }
+
+        .image-upload-wrapper.dragover {
+            background: #eef2ff;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .remove-image-btn {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 6px 12px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .remove-image-btn:hover {
+            background: #c0392b;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-reset {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        /* Table Section */
+        .table-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .table-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-export {
+            padding: 10px 20px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-export:hover {
+            background: #229954;
+        }
+
+        .btn-delete-all {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-delete-all:hover {
+            background: #c0392b;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.95rem;
+        }
+
+        table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .student-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit, .btn-delete, .btn-view {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .btn-view {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-edit:hover,
+        .btn-delete:hover,
+        .btn-view:hover {
+            transform: scale(1.05);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #7f8c8d;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #2c3e50;
+        }
+
+        .modal-content h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        /* View Modal */
+        .view-modal-content {
+            text-align: center;
+        }
+
+        .view-student-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .view-info {
+            text-align: left;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .view-info-label {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .view-info-value {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #f5c6cb;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .table-controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .btn-export, .btn-delete-all {
+                width: 100%;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-edit, .btn-delete, .btn-view {
+                width: 100%;
+            }
+
+            .student-image {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📚 Student Information Management System</h1>
+            <p>Manage and organize student records with photos</p>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="totalStudents">0</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div id="successAlert" class="alert alert-success"></div>
+        <div id="errorAlert" class="alert alert-error"></div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>Add Student</h2>
+                <form id="studentForm">
+                    <div class="image-upload-group">
+                        <label class="image-upload-label">Student Photo</label>
+                        <div class="image-upload-wrapper" id="uploadWrapper">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">Click or drag to upload photo</div>
+                            <div class="upload-hint">JPG, PNG (Max 5MB)</div>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*">
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" class="preview-img" alt="Preview">
+                            <button type="button" class="remove-image-btn" onclick="removeImage()">Remove Image</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentName">Student Name *</label>
+                        <input type="text" id="studentName" name="studentName" required placeholder="Enter student name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fatherName">Father's Name *</label>
+                        <input type="text" id="fatherName" name="fatherName" required placeholder="Enter father's name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="semesterMarks">Semester Marks *</label>
+                        <input type="number" id="semesterMarks" name="semesterMarks" required placeholder="Enter marks (0-100)" min="0" max="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <textarea id="address" name="address" required placeholder="Enter complete address"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="Enter 10-digit phone number" pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email ID *</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter email address">
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-submit">Add Student</button>
+                        <button type="reset" class="btn btn-reset" onclick="resetForm()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section">
+                <h2>Student Records</h2>
+
+                <div class="table-controls">
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search by name, email, or phone...">
+                    <button class="btn-export" onclick="exportToCSV()">📥 Export to CSV</button>
+                    <button class="btn-delete-all" onclick="deleteAllStudents()">🗑️ Clear All</button>
+                </div>
+
+                <div class="table-wrapper" id="tableWrapper">
+                    <div class="empty-state">
+                        <p>No student records found. Add a student to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Student Information</h2>
+            <form id="editForm">
+                <input type="hidden" id="editStudentId">
+                
+                <div class="image-upload-group">
+                    <label class="image-upload-label">Student Photo</label>
+                    <div class="image-preview" id="editImagePreview">
+                        <img id="editPreviewImg" class="preview-img" alt="Preview">
+                        <button type="button" class="remove-image-btn" onclick="removeEditImage()">Remove Image</button>
+                    </div>
+                    <div class="image-upload-wrapper" id="editUploadWrapper">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-text">Click or drag to upload photo</div>
+                        <div class="upload-hint">JPG, PNG (Max 5MB)</div>
+                    </div>
+                    <input type="file" id="editImageInput" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="editStudentName">Student Name</label>
+                    <input type="text" id="editStudentName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editFatherName">Father's Name</label>
+                    <input type="text" id="editFatherName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editSemesterMarks">Semester Marks</label>
+                    <input type="number" id="editSemesterMarks" required min="0" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="editAddress">Address</label>
+                    <textarea id="editAddress" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPhoneNumber">Phone Number</label>
+                    <input type="tel" id="editPhoneNumber" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label for="editEmail">Email ID</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-submit">Update Student</button>
+                    <button type="button" class="btn btn-reset" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content view-modal-content">
+            <span class="close" onclick="closeViewModal()">&times;</span>
+            <h2>Student Details</h2>
+            <div id="viewContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            displayStudents();
+            setupEventListeners();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            document.getElementById('studentForm').addEventListener('submit', addStudent);
+            document.getElementById('editForm').addEventListener('submit', updateStudent);
+            document.getElementById('searchInput').addEventListener('keyup', searchStudents);
+
+            // Image upload for add form
+            const uploadWrapper = document.getElementById('uploadWrapper');
+            const imageInput = document.getElementById('imageInput');
+
+            uploadWrapper.addEventListener('click', () => imageInput.click());
+            uploadWrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadWrapper.classList.add('dragover');
+            });
+            uploadWrapper.addEventListener('dragleave', () => {
+                uploadWrapper.classList.remove('dragover');
+            });
+            uploadWrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadWrapper.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    imageInput.files = e.dataTransfer.files;
+                    handleImageSelect();
+                }
+            });
+
+            imageInput.addEventListener('change', handleImageSelect);
+
+            // Image upload for edit form
+            const editUploadWrapper = document.getElementById('editUploadWrapper');
+            const editImageInput = document.getElementById('editImageInput');
+
+            editUploadWrapper.addEventListener('click', () => editImageInput.click());
+            editUploadWrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                editUploadWrapper.classList.add('dragover');
+            });
+            editUploadWrapper.addEventListener('dragleave', () => {
+                editUploadWrapper.classList.remove('dragover');
+            });
+            editUploadWrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                editUploadWrapper.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    editImageInput.files = e.dataTransfer.files;
+                    handleEditImageSelect();
+                }
+            });
+
+            editImageInput.addEventListener('change', handleEditImageSelect);
+        }
+
+        // Handle image selection for add form
+        function handleImageSelect() {
+            const imageInput = document.getElementById('imageInput');
+            const file = imageInput.files[0];
+
+            if (file && file.size <= 5 * 1024 * 1024) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                showAlert('File must be an image and less than 5MB', 'error');
+                imageInput.value = '';
+            }
+        }
+
+        // Handle image selection for edit form
+        function handleEditImageSelect() {
+            const editImageInput = document.getElementById('editImageInput');
+            const file = editImageInput.files[0];
+
+            if (file && file.size <= 5 * 1024 * 1024) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const editPreviewImg = document.getElementById('editPreviewImg');
+                    editPreviewImg.src = e.target.result;
+                    document.getElementById('editImagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                showAlert('File must be an image and less than 5MB', 'error');
+                editImageInput.value = '';
+            }
+        }
+
+        // Remove image from add form
+        function removeImage() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        // Remove image from edit form
+        function removeEditImage() {
+            document.getElementById('editImageInput').value = '';
+            document.getElementById('editPreviewImg').src = '';
+            document.getElementById('editImagePreview').style.display = 'none';
+        }
+
+        // Reset form and image
+        function resetForm() {
+            document.getElementById('studentForm').reset();
+            removeImage();
+        }
+
+        // Get all students from localStorage
+        function getAllStudents() {
+            const students = localStorage.getItem('students');
+            return students ? JSON.parse(students) : [];
+        }
+
+        // Save students to localStorage
+        function saveStudents(students) {
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+
+        // Add new student
+        function addStudent(e) {
+            e.preventDefault();
+
+            const imageInput = document.getElementById('imageInput');
+            let imageData = null;
+
+            if (imageInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imageData = event.target.result;
+                    saveNewStudent(imageData);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                saveNewStudent(null);
+            }
+
+            function saveNewStudent(image) {
+                const students = getAllStudents();
+                const newStudent = {
+                    id: Date.now(),
+                    photo: image,
+                    studentName: document.getElementById('studentName').value,
+                    fatherName: document.getElementById('fatherName').value,
+                    semesterMarks: document.getElementById('semesterMarks').value,
+                    address: document.getElementById('address').value,
+                    phoneNumber: document.getElementById('phoneNumber').value,
+                    email: document.getElementById('email').value,
+                    createdAt: new Date().toLocaleDateString()
+                };
+
+                students.push(newStudent);
+                saveStudents(students);
+
+                showAlert('Student added successfully!', 'success');
+                resetForm();
+                displayStudents();
+            }
+        }
+
+        // Display all students
+        function displayStudents() {
+            const students = getAllStudents();
+            const tableWrapper = document.getElementById('tableWrapper');
+
+            document.getElementById('totalStudents').textContent = students.length;
+
+            if (students.length === 0) {
+                tableWrapper.innerHTML = `
+                    <div class="empty-state">
+                        <p>No student records found. Add a student to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>S.No</th>
+                            <th>Student Name</th>
+                            <th>Father's Name</th>
+                            <th>Marks</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Date Added</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            students.forEach((student, index) => {
+                const photoHTML = student.photo 
+                    ? `<img src="${student.photo}" class="student-image" alt="Photo">`
+                    : `<div style="width: 50px; height: 50px; border-radius: 50%; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>`;
+
+                tableHTML += `
+                    <tr>
+                        <td>${photoHTML}</td>
+                        <td>${index + 1}</td>
+                        <td>${student.studentName}</td>
+                        <td>${student.fatherName}</td>
+                        <td>${student.semesterMarks}</td>
+                        <td>${student.phoneNumber}</td>
+                        <td>${student.email}</td>
+                        <td>${student.createdAt}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-view" onclick="openViewModal(${student.id})">View</button>
+                                <button class="btn-edit" onclick="openEditModal(${student.id})">Edit</button>
+                                <button class="btn-delete" onclick="deleteStudent(${student.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            tableWrapper.innerHTML = tableHTML;
+        }
+
+        // Search students
+        function searchStudents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const students = getAllStudents();
+            const filteredStudents = students.filter(student =>
+                student.studentName.toLowerCase().includes(searchTerm) ||
+                student.email.toLowerCase().includes(searchTerm) ||
+                student.phoneNumber.includes(searchTerm)
+            );
+
+            const tableWrapper = document.getElementById('tableWrapper');
+
+            if (filteredStudents.length === 0) {
+                tableWrapper.innerHTML = `
+                    <div class="empty-state">
+                        <p>No students found matching your search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>S.No</th>
+                            <th>Student Name</th>
+                            <th>Father's Name</th>
+                            <th>Marks</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Date Added</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            filteredStudents.forEach((student, index) => {
+                const photoHTML = student.photo 
+                    ? `<img src="${student.photo}" class="student-image" alt="Photo">`
+                    : `<div style="width: 50px; height: 50px; border-radius: 50%; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>`;
+
+                tableHTML += `
+                    <tr>
+                        <td>${photoHTML}</td>
+                        <td>${index + 1}</td>
+                        <td>${student.studentName}</td>
+                        <td>${student.fatherName}</td>
+                        <td>${student.semesterMarks}</td>
+                        <td>${student.phoneNumber}</td>
+                        <td>${student.email}</td>
+                        <td>${student.createdAt}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-view" onclick="openViewModal(${student.id})">View</button>
+                                <button class="btn-edit" onclick="openEditModal(${student.id})">Edit</button>
+                                <button class="btn-delete" onclick="deleteStudent(${student.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            tableWrapper.innerHTML = tableHTML;
+        }
+
+        // Open view modal
+        function openViewModal(id) {
+            const students = getAllStudents();
+            const student = students.find(s => s.id === id);
+
+            if (student) {
+                const photoHTML = student.photo 
+                    ? `<img src="${student.photo}" class="view-student-image" alt="Photo">`
+                    : `<div style="width: 200px; height: 200px; border-radius: 10px; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin-bottom: 1.5rem;">👤</div>`;
+
+                const viewContent = `
+                    ${photoHTML}
+                    <div class="view-info">
+                        <div class="view-info-label">Student Name</div>
+                        <div class="view-info-value">${student.studentName}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Father's Name</div>
+                        <div class="view-info-value">${student.fatherName}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Semester Marks</div>
+                        <div class="view-info-value">${student.semesterMarks}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Address</div>
+                        <div class="view-info-value">${student.address}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Phone Number</div>
+                        <div class="view-info-value">${student.phoneNumber}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Email ID</div>
+                        <div class="view-info-value">${student.email}</div>
+                    </div>
+                    <div class="view-info">
+                        <div class="view-info-label">Date Added</div>
+                        <div class="view-info-value">${student.createdAt}</div>
+                    </div>
+                `;
+
+                document.getElementById('viewContent').innerHTML = viewContent;
+                document.getElementById('viewModal').style.display = 'block';
+            }
+        }
+
+        // Close view modal
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Open edit modal
+        function openEditModal(id) {
+            const students = getAllStudents();
+            const student = students.find(s => s.id === id);
+
+            if (student) {
+                document.getElementById('editStudentId').value = student.id;
+                document.getElementById('editStudentName').value = student.studentName;
+                document.getElementById('editFatherName').value = student.fatherName;
+                document.getElementById('editSemesterMarks').value = student.semesterMarks;
+                document.getElementById('editAddress').value = student.address;
+                document.getElementById('editPhoneNumber').value = student.phoneNumber;
+                document.getElementById('editEmail').value = student.email;
+
+                if (student.photo) {
+                    document.getElementById('editPreviewImg').src = student.photo;
+                    document.getElementById('editImagePreview').style.display = 'block';
+                } else {
+                    document.getElementById('editImagePreview').style.display = 'none';
+                }
+
+                document.getElementById('editImageInput').value = '';
+                document.getElementById('editModal').style.display = 'block';
+            }
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('editForm').reset();
+            removeEditImage();
+        }
+
+        // Update student
+        function updateStudent(e) {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('editStudentId').value);
+            const students = getAllStudents();
+            const studentIndex = students.findIndex(s => s.id === id);
+            const editImageInput = document.getElementById('editImageInput');
+
+            if (studentIndex !== -1) {
+                if (editImageInput.files.length > 0) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        updateStudentData(studentIndex, students, event.target.result);
+                    };
+                    reader.readAsDataURL(editImageInput.files[0]);
+                } else {
+                    updateStudentData(studentIndex, students, students[studentIndex].photo);
+                }
+            }
+
+            function updateStudentData(index, studentsArray, photo) {
+                studentsArray[index].photo = photo;
+                studentsArray[index].studentName = document.getElementById('editStudentName').value;
+                studentsArray[index].fatherName = document.getElementById('editFatherName').value;
+                studentsArray[index].semesterMarks = document.getElementById('editSemesterMarks').value;
+                studentsArray[index].address = document.getElementById('editAddress').value;
+                studentsArray[index].phoneNumber = document.getElementById('editPhoneNumber').value;
+                studentsArray[index].email = document.getElementById('editEmail').value;
+
+                saveStudents(studentsArray);
+                showAlert('Student updated successfully!', 'success');
+                closeEditModal();
+                displayStudents();
+            }
+        }
+
+        // Delete student
+        function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student record?')) {
+                const students = getAllStudents();
+                const filteredStudents = students.filter(s => s.id !== id);
+                saveStudents(filteredStudents);
+                showAlert('Student deleted successfully!', 'success');
+                displayStudents();
+            }
+        }
+
+        // Delete all students
+        function deleteAllStudents() {
+            if (confirm('Are you sure you want to delete ALL student records? This action cannot be undone.')) {
+                localStorage.removeItem('students');
+                showAlert('All student records have been deleted!', 'success');
+                displayStudents();
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const students = getAllStudents();
+
+            if (students.length === 0) {
+                showAlert('No students to export!', 'error');
+                return;
+            }
+
+            let csv = 'S.No,Student Name,Father\'s Name,Semester Marks,Address,Phone Number,Email,Date Added\n';
+
+            students.forEach((student, index) => {
+                csv += `${index + 1},"${student.studentName}","${student.fatherName}",${student.semesterMarks},"${student.address}",${student.phoneNumber},${student.email},${student.createdAt}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Students_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            showAlert('File exported successfully!', 'success');
+        }
+
+        // Show alert messages
+        function showAlert(message, type) {
+            const alertDiv = type === 'success' ? 
+                document.getElementById('successAlert') : 
+                document.getElementById('errorAlert');
+
+            alertDiv.textContent = message;
+            alertDiv.style.display = 'block';
+
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const viewModal = document.getElementById('viewModal');
+            
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+            if (event.target === viewModal) {
+                closeViewModal();
+            }
+        }
+    </script>
+</body>
+</html>
